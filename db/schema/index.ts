@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import {
   mysqlTable,
   varchar,
@@ -8,18 +8,13 @@ import {
   primaryKey,
 } from 'drizzle-orm/mysql-core';
 // esModule导入会报错
-import * as dayjs from 'dayjs';
 
 // declaring enum in database
 
 const baseColumns = {
   id: serial('id').primaryKey(),
-  createTime: datetime('createTime', { mode: 'string' }).$defaultFn(() =>
-    dayjs().format('YYYY-MM-DD HH:mm:ss'),
-  ),
-  updateTime: datetime('updateTime', { mode: 'string' }).$defaultFn(() =>
-    dayjs().format('YYYY-MM-DD HH:mm:ss'),
-  ),
+  createTime: datetime('createTime', { mode: 'string' }).default(sql`now()`),
+  updateTime: datetime('updateTime', { mode: 'string' }).default(sql`now()`),
 };
 
 export const users = mysqlTable('user', {
